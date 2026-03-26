@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /gameRooms/{roomId} {
+      // Anyone signed in anonymously can read the room state
+      allow read: if request.auth != null;
+      
+      // Anyone signed in anonymously can create a new room
+      allow create: if request.auth != null;
+      
+      // Allow players to join an existing room and make moves. 
+      // (For this prototype phase, anyone authenticated can update the room)
+      allow update: if request.auth != null;
+      
+      // Rooms should eventually clean themselves up, but users can't delete them manually for now
+      allow delete: if false;
+    }
+  }
+}

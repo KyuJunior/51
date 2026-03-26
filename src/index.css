@@ -1,0 +1,124 @@
+/* src/index.css — Tailwind v4 entry point */
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+@theme {
+  --color-felt:        #1a1a24;
+  --color-felt-dark:   #0a0a0f;
+  --color-felt-light:  #2a2a35;
+  --color-gold:        #f6d365;
+  --color-gold-light:  #fdf0c2;
+  --color-card-bg:     #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', system-ui, sans-serif;
+  background: radial-gradient(circle at 50% 0%, #1a1a24 0%, #050505 100%);
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-attachment: fixed;
+  position: relative;
+  z-index: 0;
+}
+
+@keyframes meshShift {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(52, 211, 153, 0.04), transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(212, 168, 67, 0.04), transparent 50%);
+  background-size: 200% 200%;
+  animation: meshShift 20s ease-in-out infinite;
+}
+
+/* ── Modern Premium UI Elements ────────────────────── */
+
+.modern-glass {
+  background: rgba(20, 20, 30, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, #eab308 0%, #f6d365 100%);
+  color: #111;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  box-shadow: 0 10px 25px rgba(246, 211, 101, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.btn-premium:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(246, 211, 101, 0.5);
+}
+.btn-premium:active { transform: translateY(1px); box-shadow: 0 5px 15px rgba(246, 211, 101, 0.3); }
+.btn-premium:disabled { border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); box-shadow: none; transform: none; cursor: not-allowed; }
+
+.input-premium {
+  background: rgba(0,0,0,0.2);
+  border: 2px solid transparent;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+.input-premium:focus {
+  outline: none;
+  background: rgba(255,255,255,0.03);
+  border-bottom-color: #f6d365;
+}
+.input-premium::placeholder { color: rgba(255,255,255,0.3); font-weight: 300; }
+
+/* ── 3D Stacked Deck ───────────────────────────────── */
+.stacked-deck {
+  box-shadow: 
+    -1px 1px 0 #fff, -2px 2px 0 #111,
+    -3px 3px 0 #fff, -4px 4px 0 #111,
+    -5px 5px 0 #fff, -6px 6px 0 #111,
+    -10px 10px 20px rgba(0,0,0,0.8);
+  transform: translate(3px, -3px);
+}
+
+.stacked-cards-small {
+  box-shadow: 
+    -1px 1px 0 #fff, -2px 2px 0 #111,
+    -3px 3px 0 #fff, -4px 4px 0 #111;
+  transform: translate(2px, -2px);
+}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes drawCardIn {
+  0% { opacity: 0; transform: translateY(-40px) scale(0.85) rotate(-8deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+.animate-draw { animation: drawCardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+@keyframes floatLogo {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: floatLogo 6s ease-in-out infinite; }
+
+/* ── Pulsing dot for live indicator ────────────────── */
+.pulse-dot {
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
