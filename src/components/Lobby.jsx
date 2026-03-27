@@ -343,15 +343,16 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
 
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-md modern-glass rounded-2xl overflow-hidden">
+        <div className="w-full max-w-md modern-glass rounded-[20px] overflow-hidden">
 
           {/* Header */}
-          <div className="bg-white/5 backdrop-blur-md px-6 pt-8 pb-6 text-center border-b border-white/10">
-            <p className="text-[var(--color-gold)] text-xs uppercase tracking-[0.25em] mb-1">Room Code</p>
-            <h1 className="text-5xl font-extrabold text-[var(--color-gold-light)] tracking-widest select-all">
+          <div className="bg-white/5 backdrop-blur-3xl px-6 pt-10 pb-8 text-center border-b border-white/5 relative">
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--color-gold)]/40 to-transparent" />
+            <p className="text-[var(--color-gold)] text-[10px] uppercase tracking-[0.3em] font-medium mb-2">Room Code</p>
+            <h1 className="text-5xl font-serif text-white tracking-wider select-all drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
               {roomId}
             </h1>
-            <p className="text-white/60 text-[10px] mt-2 font-mono uppercase tracking-widest">Share this code to invite friends</p>
+            <p className="text-white/40 text-[10px] mt-3 font-sans uppercase tracking-[0.2em]">Share this code to invite friends</p>
             <button 
               onClick={handleShare}
               className="mt-4 mx-auto px-5 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 rounded-xl text-emerald-400 font-bold text-xs uppercase tracking-widest transition-all hover:-translate-y-0.5 shadow-[0_4px_15px_rgba(16,185,129,0.2)] flex items-center gap-2 cursor-pointer"
@@ -497,29 +498,29 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
       <div className="w-full max-w-md my-auto py-8">
 
         {/* Logo / title card */}
-        <div className="text-center mb-10 animate-float">
+        <div className="text-center mb-12 animate-float relative z-10">
           {/* Decorative suits */}
-          <div className="flex justify-center gap-4 text-3xl mb-4 select-none opacity-80">
+          <div className="flex justify-center gap-5 text-2xl mb-5 select-none opacity-90 drop-shadow-xl">
             {['♠', '♥', '♦', '♣'].map((s, i) => (
               <span
                 key={s}
-                className="drop-shadow-[0_4px_12px_rgba(255,255,255,0.2)]"
+                className="drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                 style={{ color: suitColor(s), animationDelay: `${i * 0.1}s` }}
               >
                 {s}
               </span>
             ))}
           </div>
-          <h1 className="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-yellow-100 via-yellow-400 to-yellow-600 drop-shadow-[0_4px_20px_rgba(246,211,101,0.5)] tracking-tighter mb-4">
-            GAME 51
+          <h1 className="text-5xl sm:text-7xl font-serif font-medium text-white drop-shadow-[0_10px_30px_rgba(202,138,4,0.3)] tracking-wide mb-2">
+            Game 51
           </h1>
-          <p className="text-[var(--color-gold)] font-bold text-xs tracking-[0.3em] uppercase opacity-80">
-            Iraqi Rummy <span className="mx-2 opacity-50">•</span> Multiplayer
+          <p className="text-[var(--color-gold)] font-medium text-[9px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase opacity-90">
+            Iraqi Rummy <span className="mx-2 opacity-30">•</span> Multiplayer
           </p>
         </div>
 
         {/* Main glass panel */}
-        <div className="modern-glass rounded-3xl p-6 sm:p-8 flex flex-col gap-6 relative overflow-hidden">
+        <div className="modern-glass rounded-[24px] p-6 sm:p-8 flex flex-col gap-6 relative z-10">
           {/* Ambient inner glow */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--color-gold)]/30 to-transparent" />
 
@@ -564,7 +565,7 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
           </div>
 
           {/* Join Room */}
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <input
               id="input-join-code"
               type="text"
@@ -573,13 +574,13 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
               onKeyDown={e => e.key === 'Enter' && handleJoinRoom()}
               placeholder="CODE"
               maxLength={5}
-              className="input-premium flex-1 rounded-xl px-5 py-4 text-base font-mono tracking-widest uppercase text-center"
+              className="input-premium flex-1 w-0 min-w-0 rounded-xl px-4 sm:px-5 py-4 text-base font-mono tracking-widest uppercase text-center"
             />
             <button
               id="btn-join-room"
               onClick={handleJoinRoom}
               disabled={loading || !user}
-              className="btn-premium px-8 text-sm shrink-0"
+              className="btn-premium px-6 sm:px-8 text-sm shrink-0"
             >
               JOIN
             </button>
@@ -594,9 +595,9 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
 
           {/* Auth status */}
           <div className="pt-2 flex justify-center items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${user ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-yellow-500 animate-pulse'}`} />
-            <span className="text-white/40 text-[10px] uppercase tracking-widest font-medium">
-              {user ? `Connected Annonymously` : 'Tuning server connection…'}
+            <div className={`w-2 h-2 rounded-full shrink-0 ${user ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-yellow-500 animate-pulse'}`} />
+            <span className="text-white/40 text-[9px] sm:text-[10px] uppercase tracking-widest font-medium">
+              {user ? `Connected Anonymously` : 'Tuning server connection…'}
             </span>
           </div>
         </div>

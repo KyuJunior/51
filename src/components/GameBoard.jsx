@@ -58,14 +58,14 @@ function PlayingCard({ card, selected, onClick, small = false, disabled = false,
       ) : (
         <>
           <div className="leading-none font-bold text-left">
-            <div className={small ? 'text-xs' : 'text-base sm:text-lg'}>{card.rank}</div>
+            <div className={`font-serif ${small ? 'text-sm' : 'text-xl sm:text-2xl'}`}>{card.rank}</div>
             <div className={small ? 'text-[8px]' : 'text-sm'}>{symbol}</div>
           </div>
           <div className="absolute inset-0 flex items-center justify-center text-4xl sm:text-5xl opacity-5 pointer-events-none">
             {symbol}
           </div>
           <div className="leading-none font-bold rotate-180 self-end text-left">
-            <div className={small ? 'text-xs' : 'text-base sm:text-lg'}>{card.rank}</div>
+            <div className={`font-serif ${small ? 'text-sm' : 'text-xl sm:text-2xl'}`}>{card.rank}</div>
             <div className={small ? 'text-[8px]' : 'text-sm'}>{symbol}</div>
           </div>
         </>
@@ -94,9 +94,9 @@ function CardBack({ onClick, onPointerDown, onPointerUp, onPointerLeave, onConte
         disabled ? 'opacity-70 cursor-not-allowed hover:translate-y-0' : ''
       ].join(' ')}
     >
-      <div className="absolute inset-2 border border-slate-600/50 rounded-xl overflow-hidden flex flex-col">
+      <div className="absolute inset-2 border border-slate-600/50 rounded-xl overflow-hidden flex flex-col shadow-inner">
         {/* Subtle patterned design inside */}
-        <div className="flex-1 border-b border-slate-900 bg-slate-800/50"></div>
+        <div className="flex-1 border-b border-slate-900 bg-slate-800/40"></div>
         <div className="flex-1 bg-slate-950/80"></div>
       </div>
       <span className="relative z-10 text-white/50 text-[10px] font-bold font-sans tracking-widest">{count} CARDS</span>
@@ -139,11 +139,11 @@ function TableMeld({ cards, onClick, canAdd, isTarkibMode }) {
     <div
       onClick={onClick}
       className={[
-        'flex gap-2 p-3 rounded-2xl border transition-all',
-        'bg-white/5 backdrop-blur-md shadow-lg',
+        'flex gap-3 p-3 rounded-2xl border transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]',
+        'modern-glass shadow-lg',
         isTarkibMode
           ? canAdd
-            ? 'border-emerald-400 bg-emerald-900/30 cursor-pointer shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:scale-105 hover:z-20'
+            ? 'border-emerald-400 bg-emerald-900/30 cursor-pointer shadow-[0_10px_25px_rgba(52,211,153,0.3)] hover:scale-[1.03] hover:z-20'
             : 'border-white/10 opacity-50 cursor-not-allowed'
           : 'border-white/10',
       ].join(' ')}
