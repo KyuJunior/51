@@ -417,6 +417,14 @@ export default function GameBoard({ roomId, playerId, onLeave }) {
         setMeldMsg({ text: result.reason, ok: false });
         return;
       }
+
+      if (room?.isKhabithaMode) {
+        const stagedPts = pendingGroups.reduce((sum, g) => sum + calculatePoints(g), 0);
+        if ((room?.highestMeldPoints || 0) > 0 && stagedPts < room.highestMeldPoints) {
+          setMeldMsg({ text: `🔥 الخبيثة: You must meld at least ${room.highestMeldPoints} points!`, ok: false });
+          return;
+        }
+      }
     } else {
       for (const group of pendingGroups) {
         if (!isValidSet(group) && !isValidRun(group)) {
@@ -441,11 +449,18 @@ export default function GameBoard({ roomId, playerId, onLeave }) {
       const formattedGroups = pendingGroups.map(group => ({ cards: sortMeld(group) }));
       const newMelds   = [...tableMelds, ...formattedGroups];
 
-      await updateDoc(doc(db, 'gameRooms', roomId), {
+      const updateData = {
         [`hands.${playerId}`]:    newHand,
         tableMelds:               newMelds,
         [`hasMelded.${playerId}`]: true,
-      });
+      };
+
+      if (!hasMelded && room?.isKhabithaMode) {
+        const stagedPts = pendingGroups.reduce((sum, g) => sum + calculatePoints(g), 0);
+        updateData.highestMeldPoints = Math.max(stagedPts, room?.highestMeldPoints || 0);
+      }
+
+      await updateDoc(doc(db, 'gameRooms', roomId), updateData);
       setPendingGroups([]);
       setSelectedIds(new Set());
       setMeldMsg({ text: `✓ Melded successfully!`, ok: true });
@@ -637,14 +652,6 @@ export default function GameBoard({ roomId, playerId, onLeave }) {
     </div>
   );
 
-  // ─── Compute pending group point totals ────────────────────────────────────
-  const { calculatePoints: calcPts } = (() => {
-    // Lazy import-like: grab calculatePoints from the module scope
-    try {
-      const gl = { calculatePoints: require('../gameLogic').calculatePoints };
-      return gl;
-    } catch { return { calculatePoints: () => 0 }; }
-  })();
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
@@ -654,8 +661,13 @@ export default function GameBoard({ roomId, playerId, onLeave }) {
       <header className="shrink-0 flex items-center justify-between p-4 bg-white/5 backdrop-blur-md border-b border-white/10 sticky top-0 z-40 shadow-lg">
         <div className="flex items-center gap-3">
           <span className="text-emerald-400 font-bold tracking-widest text-sm uppercase drop-shadow-md">{roomId}</span>
-          <span className="text-white/20 text-xs">•</span>
-          <span className="text-slate-300 text-xs font-medium tracking-wide">{drawPile.length} IN DECK</span>
+          <span className="text-white/20 text-xs hidden sm:inline">•</span>
+          <span className="text-slate-300 text-xs font-medium tracking-wide hidden sm:inline">{drawPile.length} IN DECK</span>
+          {room?.isKhabithaMode && (
+            <span className="ml-[1px] sm:ml-2 bg-red-900/40 border border-red-500/40 text-red-400 px-2 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-bold tracking-widest uppercase shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+              🔥 Target: {room?.highestMeldPoints ? `${room.highestMeldPoints}+` : '51+'}
+            </span>
+          )}
         </div>
         <div className="flex gap-4 items-center relative z-50">
           {hasMelded && <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">✓ Melded</span>}

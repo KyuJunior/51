@@ -273,6 +273,7 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
         // Track which players have completed their first ≥51-pt meld
         hasMelded: Object.fromEntries(players.map(p => [p.id, false])),
         startedAt:     serverTimestamp(),
+        highestMeldPoints: 0, // Reset Khabitha tracker every round
       });
       // onSnapshot will fire → onGameStart callback propagates to parent
     } catch (err) {
@@ -420,6 +421,42 @@ export default function Lobby({ onGameStart, initialJoinCode = '' }) {
             {error && (
               <div className="mb-4 bg-red-900/30 border border-red-500/30 text-red-300 text-sm rounded-lg px-4 py-3">
                 {error}
+              </div>
+            )}
+
+            {/* Host Options */}
+            {isHost && (
+              <div className="mb-6 bg-white/5 rounded-xl p-4 border border-white/10 flex items-center justify-between">
+                <div>
+                  <h3 className="text-emerald-400 font-bold text-sm tracking-wide flex items-center gap-2">
+                    🔥 الخبيثة (Al-Khabitha)
+                  </h3>
+                  <p className="text-white/40 text-[10px] mt-1 font-mono uppercase tracking-widest max-w-[200px]">
+                    Players must match or beat the highest initial meld points.
+                  </p>
+                </div>
+                <button
+                  onClick={async () => {
+                    const nextVal = !(roomData?.isKhabithaMode ?? false);
+                    await updateDoc(doc(db, 'gameRooms', roomId), { isKhabithaMode: nextVal });
+                  }}
+                  className={`w-14 h-7 rounded-full relative transition-colors shadow-inner flex items-center cursor-pointer ${
+                    roomData?.isKhabithaMode ? 'bg-emerald-500' : 'bg-black/40 border border-white/10'
+                  }`}
+                >
+                  <div 
+                    className={`w-5 h-5 rounded-full bg-white absolute transition-all shadow-md ${
+                      roomData?.isKhabithaMode ? 'left-8' : 'left-1'
+                    }`} 
+                  />
+                </button>
+              </div>
+            )}
+            
+            {/* If not host, just read-only badge */}
+            {!isHost && roomData?.isKhabithaMode && (
+              <div className="mb-6 bg-red-900/20 border border-red-500/30 text-red-300 rounded-xl p-4 text-center text-xs font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                🔥 AL-KHABITHA MODE IS ENABLED BY HOST
               </div>
             )}
 
